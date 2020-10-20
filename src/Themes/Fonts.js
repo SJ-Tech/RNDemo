@@ -1,0 +1,20 @@
+export default {
+    px_1:1,
+    px_2: 2,
+    px_4: 4,
+    px_5: 5,
+    px_8: 8,
+    px_10: 10,
+    px_12: 12,
+    px_14: 14,
+    px_16: 16,
+    px_18: 18,
+    px_20: 20,
+    px_40: 40,
+
+    txt_size_small_12: 12,
+    txt_size_medium_14: 14,
+    txt_size_large: 16,
+    txt_size_large_extra: 18,
+    txt_size_large_extra_20: 20,
+};
