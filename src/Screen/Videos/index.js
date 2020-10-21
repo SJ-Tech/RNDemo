@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { Text, View, TouchableOpacity, StyleSheet, TextInput, Dimensions, ImageBackground, FlatList, Image, SafeAreaView, ScrollView, Alert } from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet, Dimensions, ImageBackground, FlatList, Image, SafeAreaView, ScrollView, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import Color from '../../Themes/Color';
 import Fonts from '../../Themes/Fonts';
 import Video from 'react-native-video';
+import Share from "react-native-share";
+import Icon from 'react-native-vector-icons/FontAwesome';
 import ImagePicker from 'react-native-image-picker';
 import { getVideoList } from '../../ReduxStore/actions/VideoListAction';
 let width = Dimensions.get('window').width;
@@ -17,7 +19,7 @@ const options = {
     // customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
     storageOptions: {
         skipBackup: true,
-        //  path: 'images',
+        path: 'images',
     },
 };
 
@@ -44,10 +46,6 @@ class index extends Component {
                 console.log('ImagePicker Error: ', response.error);
             } else {
                 const source = { uri: response.uri };
-
-                // You can also display the image using data:
-                // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-
                 this.setState({
                     avatarSource: source,
                 });
@@ -57,41 +55,69 @@ class index extends Component {
 
     videoListItem = ({ item }) => {
         return (
-            <View style={{backgroundColor: 'gray',marginHorizontal: 10, }}>
+            <View style={{ flex:1,marginHorizontal: 10, borderRadius: 10, overflow: 'hidden',backgroundColor: 'red', }}>
+                {/* <Video
+                    source={{
+                        uri: item.video_url
+                    }}
+                    //  rate={1.0}
+                    // volume={1.0}
+                    resizeMode="cover"
+                    //  isMuted={false}
+                    //  shouldPlay={false}
+                    //  isLooping = {false}
+                    //  useNativeControls
+                    paused
 
-              
-                    <Video
-                        source={{
-                            uri: item.video_url
+                    // ref={ref => {
+                    //     this.player = ref;
+                    // }}
+                    // onEnd={() => { }}
+                    style={{ height: 200 }}
+                    // paused={this.state.paused}
+                    // muted={this.state.muted}
+                    // repeat={this.state.repeat}
+                    controls
+                /> */}
+
+
+                <ImageBackground
+                    source={{ uri: item.thumbnail_url }}
+                    style={{
+                        justifyContent: 'center',
+                        height: 210,
+                        width: "100%",
+                    }}>
+                    <TouchableOpacity activeOpacity={0.6}
+                        onLongPress={() => {
+                            const shareOptions = {
+                                message: item.video_url
+                            }
+                            try {
+                                const shareResponse = Share.open(shareOptions);
+                                console.log(JSON.stringify(shareResponse));
+                            } catch (error) {
+                                console.log('Error---', error);
+                            }
                         }}
-                       //  rate={1.0}
-                        // volume={1.0}
-                         resizeMode="cover"
-                        //  isMuted={false}
-                        //  shouldPlay={false}
-                        //  isLooping = {false}
-                        //  useNativeControls
-                         paused
-                        
-                        // ref={ref => {
-                        //     this.player = ref;
-                        // }}
-                        // onEnd={() => { }}
-                         style={{height:200}}
-                        // paused={this.state.paused}
-                        // muted={this.state.muted}
-                        // repeat={this.state.repeat}
-                        controls={false}
-                    />
-                    
-        
-                <View style={{ height: 60, position: 'absolute', left: 0, right: 0, bottom: 0, backgroundColor: 'lightgray', borderRadius: 10, padding: 10, }}>
+                        onPress={() => this.props.navigation.navigate('VideoPlay')}
+                        style={{ alignSelf: 'center', position: 'absolute', backgroundColor: 'rgba(0,0,0,0.7)', height: 50, width: 50, borderRadius: 25, justifyContent: 'center', }}>
+                        <Image style={{ height: 18, width: 18, tintColor: 'white', alignSelf: 'center', justifyContent: 'center', }}
+                            source={require('../../assets/play.png')} />
+                    </TouchableOpacity>
+
+                </ImageBackground>
+
+                <View style={{ position: 'absolute', left: 0, right: 0, bottom: 0, backgroundColor: 'lightgray', borderRadius: 10, padding: 10, justifyContent: 'center', }}>
                     <Text style={{ color: 'black', fontSize: 16, fontWeight: 'bold' }}>{item.title}</Text>
                 </View>
 
             </View>
         );
     }
+
+
+
 
     render() {
         return (
@@ -101,13 +127,13 @@ class index extends Component {
                 <View style={{ backgroundColor: '#f2f3f4', height: 75, paddingHorizontal: 10, paddingTop: 20 }}>
                     <Text style={{ fontSize: 12 }}>{'TODAY'}</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
-                        <Text style={{ fontSize: 22, fontWeight: 'bold' }}>{'My Feed'}</Text>
+                        <Text style={{ fontSize: 24, fontWeight: 'bold' }}>{'My Feed'}</Text>
                         <View style={{ backgroundColor: 'white', height: 28, width: 28, borderRadius: 14, justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: 'gray' }}>
                             <TouchableOpacity
                                 onPress={this.imagePicker}>
                                 <Image
-                                    source={this?.state?.avatarSource}
-                                    style={{ width: 28, height: 28, borderRadius: 14, alignSelf: 'center', resizeMode: 'cover', }}
+                                    source={this.state.avatarSource}
+                                    style={{ width: 28, height: 28, borderRadius: 14, alignSelf: 'center', resizeMode: 'cover', alignSelf: 'center', }}
                                 />
                             </TouchableOpacity>
                         </View>
