@@ -12,7 +12,7 @@ const videoListReducer = (state = initilState, action) => {
         case GET_VIDEO_LIST_REQUEST:
             return { ...state, loading: true };
         case GET_VIDEO_LIST_SUCCESS:
-            return { ...state, loading: false, videoList: action.payload };
+            return { ...state, loading: false, videoList: state.videoList.concat(action.payload) };
         case GET_VIDEO_LIST_FAILURE:
             return { ...state, loading: false, errorMessage: action.payload };
         default:

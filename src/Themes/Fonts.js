@@ -10,6 +10,7 @@ export default {
     px_16: 16,
     px_18: 18,
     px_20: 20,
+    px_24: 24,
     px_40: 40,
 
     txt_size_small_12: 12,
